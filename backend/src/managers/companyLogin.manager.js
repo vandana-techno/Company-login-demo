@@ -1,0 +1,44 @@
+const CompanyLoginData = require("../datalayers/companyLogin.data");
+
+const companyLoginData = new CompanyLoginData();
+
+class CompanyLoginManager {
+  /**
+   * *Get Company By CompanyCode
+   * @param {model} companyLogin.validators
+   * @returns {object}
+   */
+  async getCompanyByCompanyCode(req) {
+    try {
+      const result = await companyLoginData.getCompanyByCompanyCode(req);
+      const company = {};
+
+      if (result && result.length > 0) {
+        const module = result[0];
+        company = {
+          companyID: module.companyID,
+          companyName: module.companyName,
+          companyCode: module.companyCode,
+          companyLogo: module.companyLogo,
+        };
+      }
+      return company;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /**
+   * *Update Company
+   * @param {model} companyLogin.validators
+   * @returns {Object}
+   */
+  async updateCompanyLogin(req) {
+    try {
+      const result = await companyLoginData.updateCompanyLogin(req);
+      return result[0];
+    } catch (error) {}
+  }
+}
+
+module.exports = CompanyLoginManager;
