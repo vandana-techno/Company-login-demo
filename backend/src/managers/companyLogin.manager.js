@@ -34,8 +34,14 @@ class CompanyLoginManager {
    * @returns {Object}
    */
   async updateCompanyLogin(req) {
+    // console.log("first",req.uploadedImage);
     try {
-      const result = await companyLoginData.updateCompanyLogin(req);
+        let uploadedImage = '';
+        if(req.uploadedImage) {
+            uploadedImage = req.uploadedImage;
+            // console.log("first",uploadedImage);
+        }
+      const result = await companyLoginData.updateCompanyLogin(req, uploadedImage);
       return result[0];
     } catch (error) {}
   }

@@ -30,31 +30,34 @@ class CompanyLoginData {
    * @param {model} companyLogin.validators
    * @returns {Object}
    */
-  async updateCompanyLogin(req) {
+  async updateCompanyLogin(req, uploadedImage) {
+    const { companyID, companyName, companyCode, actionType } = req.body;
+    const procedure = "usp_updateCompanyLogin";
+
     try {
-      const { companyID, companyName, companyCode, companyLogo, actionType } =
-        req.body;
-      const procedure = "usp_updateCompanyLogin";
+        // Extract the filePath property from the uploadedImage object
+        const filePath = uploadedImage ? uploadedImage.filePath : null;
 
-      const result = await db.query(
-        `CALL ${procedure}(:companyID, :companyName, :companyCode, :companyLogo, :actionType)`,
-        {
-          replacements: {
-            companyID,
-            companyName,
-            companyCode,
-            companyLogo,
-            actionType,
-          },
-          type: db.QueryTypes.SELECT,
-        }
-      );
+        const result = await db.query(
+            `CALL ${procedure}(:companyID, :companyName, :companyCode, :companyLogo, :actionType)`,
+            {
+                replacements: {
+                    companyID,
+                    companyName,
+                    companyCode,
+                    companyLogo: filePath, // Pass the file path instead of the entire object
+                    actionType,
+                },
+                type: db.QueryTypes.SELECT,
+            }
+        );
 
-      return result;
+        return result;
     } catch (error) {
-      throw error;
+        throw error;
     }
-  }
+}
+
 }
 
 module.exports = CompanyLoginData;

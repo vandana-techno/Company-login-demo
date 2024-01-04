@@ -34,6 +34,11 @@ class CompanyLoginController {
    */
   async updateCompanyLogin(req, res, next) {
     try {
+      if (!req.uploadedImage) {
+        return apiResponse.forbiddenRequest(res, 'No logo uploaded.');
+      }
+    //   console.log("first",req.uploadedImage);
+
       const result = await companyLoginManager.updateCompanyLogin(req);
 
       if (result && result.companyID !== null) {
